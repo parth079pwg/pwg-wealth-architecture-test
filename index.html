@@ -1154,6 +1154,22 @@ function showResults() {
   });
 
   const score = Math.round((totalPts / totalMax) * 100);
+  // Send submission to Power Automate
+try {
+  fetch("https://default20c3c0c5b58e43b1ba218929d54849.88.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c7534aa0831e4177b31f678268b57d28/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=RLNcfTYA8CHC1ws1h3Hgb4kmtjfUDY99LPac_fLrX_s", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: userName,
+      email: userEmail,
+      score: score,
+      categoryScores: catPts,
+      categoryMax: catMax,
+      answers: answers,
+      timestamp: new Date().toISOString()
+    })
+  });
+} catch(e) { console.error("Submission failed", e); }
 
   // Score card
   document.getElementById("results-for").textContent = "Detailed analysis for " + userName;
